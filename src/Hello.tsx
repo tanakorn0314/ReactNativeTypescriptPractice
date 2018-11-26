@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {Button,View,StyleSheet,Text} from 'react-native';
+import {View,Text} from 'react-native';
 import {styles} from './ViewStyles';
 
 class Hello extends React.Component<Props,State>{

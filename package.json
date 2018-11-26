@@ -3,26 +3,64 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "start": "react-native start",
+    "android": "cd ./android && ./gradlew app:assembleDebug && ./gradlew installDebug",
+    "ios": "react-native run-ios",
     "test": "jest",
-    "tsc": "tsc"
+    "lint": "tslint src/**/*.ts",
+    "tsc": "tsc",
+    "clean": "rimraf build",
+    "build": "npm run clean && npm run tsc --",
+    "watch": "npm run build -- -w",
+    "start:app": "npm run build && concurrently -r 'npm run watch' 'npm run start -- --reset-cache'"
   },
   "dependencies": {
-    "react": "16.6.1",
-    "react-native": "0.57.5"
+    "await-to-js": "^2.0.1",
+    "axios": "^0.18.0",
+    "date-fns": "^1.29.0",
+    "lodash": "^4.17.10",
+    "mobx": "^4.2.0",
+    "mobx-react": "^5.0.0",
+    "react": "16.3.1",
+    "react-native": "0.56.1",
+    "react-native-elements": "1.0.0-beta7",
+    "react-native-fast-image": "^5.1.1",
+    "react-native-image-picker": "^0.27.1",
+    "react-native-image-resizer": "^1.0.0",
+    "react-native-image-zoom-viewer": "^2.2.23",
+    "react-native-keyboard-aware-scroll-view": "^0.7.4",
+    "react-native-navigation": "^2.1.2",
+    "react-native-safe-area": "^0.5.0",
+    "react-native-vector-icons": "^4.2.0",
+    "rn-fetch-blob": "^0.10.13",
+    "socket.io-client": "^2.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^23.3.9",
-    "@types/react": "^16.7.6",
-    "@types/react-native": "^0.57.10",
-    "@types/react-test-renderer": "^16.0.3",
-    "babel-jest": "23.6.0",
-    "jest": "23.6.0",
-    "metro-react-native-babel-preset": "0.49.2",
-    "react-test-renderer": "16.6.1",
-    "typescript": "^3.1.6"
+    "@types/jest": "^22.2.3",
+    "@types/react": "^16.4.18",
+    "@types/react-native": "0.56.1",
+    "babel-preset-react-native": "^5.0.2",
+    "concurrently": "^3.5.1",
+    "jest": "^23.1.0",
+    "jest-react-native": "^18.0.0",
+    "react-native-typescript-transformer": "^1.2.10",
+    "react-test-renderer": "16.3.1",
+    "rimraf": "^2.6.2",
+    "tslint": "^5.9.1",
+    "typescript": "3.1.6"
   },
   "jest": {
-    "preset": "react-native"
+    "preset": "react-native",
+    "testRegex": "build/.+\\.(test|spec).js$",
+    "coverageDirectory": "coverage",
+    "coverageReporters": [
+      "text-summary",
+      "html"
+    ],
+    "collectCoverageFrom": [
+      "build/**/*.js",
+      "!build/**/*.spec.js",
+      "!build/**/*.index.js"
+    ]
   }
 }
