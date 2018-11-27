@@ -1,5 +1,6 @@
-import Hello from './PresentationLayer/Hello';
 import { Navigation } from 'react-native-navigation';
+import { Screens } from './PresentationLayer/navigation/Screens';
+import { AppNavigation } from './PresentationLayer/navigation/AppNavigation';
 
 export default class App {
   static start() {
@@ -7,15 +8,9 @@ export default class App {
   }
 
   private static async init() {
-    Navigation.registerComponent('app', () => Hello);
-    Navigation.events().registerAppLaunchedListener(() => {
-      Navigation.setRoot({
-        root: {
-          component: {
-            name: 'app'
-          }
-        }
-      })
+    Screens.registerScreens();
+    Navigation.events().registerAppLaunchedListener(async () => {
+      AppNavigation.setRoot()
     })
   }
 
