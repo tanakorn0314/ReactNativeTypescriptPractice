@@ -1,13 +1,12 @@
 import React, {Component} from 'react';
-import { StyleSheet, View} from 'react-native';
-import Hello from './Hello';
+import { StyleSheet,Text, View} from 'react-native';
 
 interface Props {}
 export default class App extends Component<Props> {
   render() {
     return (
       <View style={styles.container}>
-        <Hello name='TK'/>
+        <Text>12345</Text>
       </View>
     );
   }

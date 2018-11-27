@@ -18,7 +18,7 @@ class Hello extends React.Component<Props,State>{
 
         return(
             <View>
-                <Text style={styles.redText}>Hello! {name}</Text>
+                <Text style={styles.redText}>Hello! World {name}</Text>
             </View>
         );
     }
