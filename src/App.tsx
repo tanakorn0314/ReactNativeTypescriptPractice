@@ -1,32 +1,22 @@
-import React, {Component} from 'react';
-import { StyleSheet,Text, View} from 'react-native';
+import Hello from './PresentationLayer/Hello';
+import { Navigation } from 'react-native-navigation';
 
-interface Props {}
-export default class App extends Component<Props> {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>12345</Text>
-      </View>
-    );
+export default class App {
+  static start() {
+    App.init();
   }
-}
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#F5FCFF',
-  },
-  welcome: {
-    fontSize: 20,
-    textAlign: 'center',
-    margin: 10,
-  },
-  instructions: {
-    textAlign: 'center',
-    color: '#333333',
-    marginBottom: 5,
-  },
-});
+  private static async init() {
+    Navigation.registerComponent('app', () => Hello);
+    Navigation.events().registerAppLaunchedListener(() => {
+      Navigation.setRoot({
+        root: {
+          component: {
+            name: 'app'
+          }
+        }
+      })
+    })
+  }
+
+}
