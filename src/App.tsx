@@ -9,7 +9,7 @@ export default class App {
 
   private static async init() {
     Screens.registerScreens();
-    Navigation.events().registerAppLaunchedListener(async () => {
+    Navigation.events().registerAppLaunchedListener(() => {
       AppNavigation.setRoot()
     })
   }

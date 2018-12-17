@@ -2,7 +2,7 @@ import { Navigation } from 'react-native-navigation';
 import { Screens } from './Screens';
 
 export class AppNavigation {
-    static setRoot(){
+    static setRoot() {
         Navigation.setRoot({
             root: {
                 component: {
