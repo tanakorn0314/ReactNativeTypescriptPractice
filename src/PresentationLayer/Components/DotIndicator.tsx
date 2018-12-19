@@ -1,67 +1,60 @@
 import React, { Component } from 'react';
 import {
-    View,
-    StyleSheet,
-    ViewStyle
+    View, StyleSheet, ViewStyle, StyleProp
 } from 'react-native';
-import { PageSelectedEvent } from './Interfaces/IViewPager';
-
-const DEFAULT_DOT_RADIUS = 6;
 
 export class DotIndicator extends Component<Props, State> {
 
     static defaultProps = {
-        initialPage: 0,
-        hideSingle: false
+        initialPage: 0
     };
 
     constructor(props: Props) {
         super(props);
         this.state = {
-            currentPage: props.initialPage
+            currentPage: this.props.initialPage
         };
     }
 
-    shouldComponentUpdate(nextProps, nextState) {
+    shouldComponentUpdate(nextProps: Props, nextState: State) {
         return this.state.currentPage !== nextState.currentPage ||
-                this.props.pageCount !== nextProps.pageCount ||
-                this.props.dotStyle !== nextProps.dotStyle ||
-                this.props.selectedDotStyle !== nextProps.selectedDotStyle;
+            this.props.pageCount !== nextProps.pageCount ||
+            this.props.dotStyle !== nextProps.dotStyle ||
+            this.props.selectedDotStyle !== nextProps.selectedDotStyle;
     }
 
     render() {
-        let { pageCount, dotStyle, dotSpace, selectedDotStyle, selectedDotSpace } = this.props;
-        if (pageCount < 0 || (this.props.hideSingle && pageCount === 1)) return undefined;
-
-        const dotWidth: number = dotStyle && dotStyle.width ? parseInt(dotStyle.width.toString(), 0) : DEFAULT_DOT_RADIUS;
-        const selectedDotWidth: number = selectedDotStyle && selectedDotStyle.width ?
-        parseInt(selectedDotStyle.width.toString(), 0) : DEFAULT_DOT_RADIUS;
-
-        let dotStyleOverride: ViewStyle = {
-            ...dotStyle,
-            width: dotWidth,
-            height: dotWidth,
-            borderRadius: dotWidth / 2,
-            margin: !!dotSpace ? dotSpace / 2 : dotWidth / 2
-        };
-
-        let selectedDotStyleOverride: ViewStyle = {
-            ...selectedDotStyle,
-            width: selectedDotWidth,
-            height: selectedDotWidth,
-            borderRadius: selectedDotWidth / 2,
-            margin: !!selectedDotSpace ? selectedDotSpace / 2 : selectedDotWidth / 2
-        };
-
+        const DEFAULT_DOT_RADIUS = 6;
+        let { pageCount, hideSingle } = this.props;
+        let dotStyle = this.props.dotStyle as ViewStyle;
+        let selectedDotStyle = this.props.selectedDotStyle as ViewStyle;
+        if (pageCount === 0 || (hideSingle && pageCount === 1)) return undefined;
         let dotsView = [];
         for (let i = 0; i < pageCount; i++) {
-            let isSelected = i === this.state.currentPage;
+            let isSelected = this.state.currentPage === i;
+            let dotWidth = dotStyle && dotStyle ? dotStyle.width as number : DEFAULT_DOT_RADIUS;
+            let selectedDotWidth = selectedDotStyle && selectedDotStyle.width ? selectedDotStyle.width as number : DEFAULT_DOT_RADIUS;
+
+            let overrideDotStyle: ViewStyle = {
+                ...dotStyle,
+                width: dotWidth,
+                height: dotWidth,
+                borderRadius: dotWidth / 2,
+                margin: dotWidth / 2
+            };
+            let overrideSelectedDotStyle: ViewStyle = {
+                ...selectedDotStyle,
+                width: selectedDotWidth,
+                height: selectedDotWidth,
+                borderRadius: selectedDotWidth / 2,
+                margin: selectedDotWidth / 2
+            };
             dotsView.push(
                 <View
                     key={i}
-                    style={[styles.dot,
-                        isSelected ? styles.selectedDot : undefined,
-                        isSelected ? selectedDotStyleOverride : dotStyleOverride]}
+                    style={isSelected ?
+                        [{ backgroundColor: 'black' }, overrideSelectedDotStyle] :
+                        [{ backgroundColor: 'white' }, overrideDotStyle]}
                 />
             );
         }
@@ -72,42 +65,33 @@ export class DotIndicator extends Component<Props, State> {
         );
     }
 
-    onPageSelected = (e: PageSelectedEvent) => {
-        console.log('selectPage = ' , e.position);
+    onPageSelected = (selectedPage: number) => {
         this.setState({
-            currentPage: e.position
+            currentPage: selectedPage
         });
     }
 }
 
+const styles = StyleSheet.create({
+    container: {
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'absolute',
+        left: 0,
+        right: 0,
+        bottom: 10
+    }
+});
+
 interface Props {
     pageCount: number;
-    initialPage?: number;
     hideSingle?: boolean;
-    dotStyle?: ViewStyle;
-    dotSpace?: number;
-    selectedDotStyle?: ViewStyle;
-    selectedDotSpace?: number;
+    initialPage?: number;
+    dotStyle?: StyleProp<ViewStyle>;
+    selectedDotStyle?: StyleProp<ViewStyle>;
 }
 
 interface State {
     currentPage: number;
 }
-
-const styles = StyleSheet.create({
-    container: {
-        position: 'absolute',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-        bottom: 10,
-        left: 0,
-        right: 0
-    },
-    dot: {
-        backgroundColor: '#BBBBBB'
-    },
-    selectedDot: {
-        backgroundColor: 'white'
-    }
-});
